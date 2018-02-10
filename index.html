@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    
+    </head>
+    <body>
+        <form>
+            <div>
+                <label for='coin'>Coin:</label>
+                <select name='typeOfCoin'>
+                    <option value='selectCoin' selected disabled>Please Select a Coin</option>
+                    <option value ='bitcoin'>Bitcoin</option>
+                    <option value='ethereum'>Etheruem</option>
+                    <option value='litecoin'>Litecoin</option>
+                </select>
+            </div>
+            <div>
+                <input type='checkbox' id='buyorsell' name='buyorsell' value="buy">
+                <label for='BuySell'>Buy</label>
+            </div>
+            <div>
+                <input type='checkbox' id='buyorsell' name='buyorsell' value="sell">
+                <label for='BuySell'>Sell</label>
+            </div>
+            <div>
+                <label for='quantity'>Quantity:</label>
+                <input type='number' id='quantity' name='quantity'>
+            </div>
+            <div>
+                <label for='purchase_price'>Purchase Price:</label>
+                <input type='number' id='price' name='price'>
+            </div>
+            <div>
+                <label for='purchase_date'>Purchase Date:</label>
+                <input type='date' id='date' name='date'>
+            </div>
+            <div>
+                <button type='submit' value="submit">Submit</button>
+            </div>
+        </form>
+    </body>
+</html>
