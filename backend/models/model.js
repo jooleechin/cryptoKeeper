@@ -16,8 +16,8 @@ function getAllTransByUser(user_id) {
 function getAllTransByUserByCoin(user_id, cointype) {
     return knex('transactions')
     .where({
-        'user_id': user_id,
-        'type_of_coin': cointype
+        'transactions.user_id': user_id,
+        'transactions.type_of_coin': cointype
     })
     .then (results => {
         return results
@@ -33,10 +33,15 @@ function createTrans(user_id, type_of_coin, qty, purchase_price, isBuy) {
         purchase_price, 
         isBuy
     })
+    .returning('*')
 }
 
 function getNetByCoin(user_id, cointype) {
-    return userTrans
+    return knex('transactions')
+    .where({
+        'transactions.user_id': user_id,
+        'transactions.type_of_coin': cointype
+    })
     .then (results => {
         return results.filter(ele => {
             return ele.type_of_coin === cointype
@@ -50,7 +55,11 @@ function getNetByCoin(user_id, cointype) {
 }
 
 function getQtyByCoin(user_id, cointype) {
-    return userTrans
+    return knex('transactions')
+    .where({
+        'transactions.user_id': user_id,
+        'transactions.type_of_coin': cointype
+    })
     .then (results => {
         return results.filter(ele => {
             return ele.type_of_coin === cointype
@@ -72,7 +81,9 @@ function updateTrans(id, user_id, qty, purchase_price, isBuy) {
         foundTrans.qty = qty
         foundTrans.purchase_price = purchase_price
         foundTrans.isBuy = isBuy
-        return foundTrans
+    })
+    .then (result => {
+        return result
     })
 }
 

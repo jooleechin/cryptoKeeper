@@ -14,7 +14,11 @@ getAllTransByUserByCoin = (req, res, next) => {
     let cointype = req.params.cointype
     crypto.getAllTransByUserByCoin(user_id, cointype)
     .then (results => {
-        res.json(results)
+        if (results.length > 0) {
+            res.json(results)
+        } else {
+            res.status(404).json({message: `You have no ${cointype}!`})
+        }
     })
 }
 
