@@ -10,6 +10,17 @@ body {
     color: #435058;
 }
 
+.dNone {
+    display: none;
+}
+
+#navSum{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
 #login, #signup {
     font-size: 30px;
     width: 20%;
@@ -34,6 +45,14 @@ main {
     height: auto;
     margin-bottom: 1%;
     padding-left: 2.5%;
+}
+
+.bcSelected {
+    background-color: white;
+}
+
+.bcNone {
+    background-color: none;
 }
 
 .colorTitle {

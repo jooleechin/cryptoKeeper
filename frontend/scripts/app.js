@@ -6,7 +6,7 @@ let userID = Number(sessionStorage.getItem('userID'))
 //let eachTransaction
 
 function getCoins() {
-    return axios.get(`http://localhost:3000/summary/user/${userID}`)
+    return axios.get(`http://localhost:3000/summary/user/${Number(sessionStorage.getItem('userID'))}`)
     .then(data => {
         ethHoldings = data.data.Ethereum
         bitHoldings = data.data.Bitcoin
@@ -29,7 +29,7 @@ loginButton.addEventListener('submit', (e) => { //just get user id and to see if
     .then (data => {
         if (data.data.matches) {
             sessionStorage.setItem('userID', data.data.matches.id) //stores as 'global'
-            // let userID = Number(sessionStorage.getItem('userID))
+//            localStorage.setItem('userIDTest', '10')
             firstName = data.data.matches.firstName
             hi()
         } else {
@@ -40,13 +40,16 @@ loginButton.addEventListener('submit', (e) => { //just get user id and to see if
 })
 
 signup.addEventListener('click', (e) => {
-    e.preventDefault()
+    e.preventDefault()    
     const h1 = document.querySelector('.cryptokeep h1')
     h1.style.display = 'inline-block'
     h1.className = 'tl pt4 avenir tracked lh-title dim pointer' 
     h1.id = 'keeperLog'
     const cryptokeepdiv = document.querySelector('.cryptokeep')
-    cryptokeepdiv.classList.add('bb','bw2')
+
+    cryptokeepdiv.style.display = 'none'
+    const logout = document.querySelector('#logout')
+    logout.style.display = 'none'
     const keeperlog = document.querySelector('#keeperLog')
     keeperlog.addEventListener('click', () => {
         window.location.href = "./index.html"
@@ -67,8 +70,8 @@ signup.addEventListener('click', (e) => {
             <p>
             Hey there, I'm cryptoKeeper. You must be 
 
-            <input type="text" name="fname" placeholder="first name" class= "fName" required> 
-            <input type='text' name="lname" placeholder='last name' class= "lName" required>.<br>
+            <input type="text" name="fname" placeholder="first name" class= "fName" required autocapitalize> 
+            <input type='text' name="lname" placeholder='last name' class= "lName" required autocapitalize>.<br>
 
             Nice to meet you. I'm so excited for you to sign up with us so that you can keep track of your wallet value in <span class="light-purple">real time</span>.<br>
             Now let's set up your account; to login, I need an email from you (don't worry I won't spam you). My email is 
@@ -96,6 +99,10 @@ signup.addEventListener('click', (e) => {
         const lName = document.querySelector('.lName').value
         const pass = document.querySelector('.password').value
         const email = document.querySelector('.signupEmail').value
+        const keeper = document.querySelector('#keeper')
+        keeper.addEventListener('click', ()=> {
+            window.location.href = "./index.html"
+        })
         const newUser = {
             firstName: fName,
             lastName: lName,
@@ -140,16 +147,27 @@ function currency(n) {
 }
 
 function summary() {
-    const h1 = document.querySelector('.cryptokeep h1')
-    h1.style.display = 'inline-block'
-    h1.className = 'tl pt4 avenir tracked lh-title pointer dim' 
-    h1.id = 'keeper'
-    const cryptokeepdiv = document.querySelector('.cryptokeep')
-    cryptokeepdiv.classList.remove('tc')
-    cryptokeepdiv.classList.add('bb','bw1')
+//    const h1 = document.querySelector('.cryptokeep h1')
+//    h1.style.display = 'inline-block'
+//    h1.className = 'tl pt4 avenir tracked lh-title pointer dim' 
+//    h1.id = 'keeper'
+//    const cryptokeepdiv = document.querySelector('.cryptokeep')
+//    cryptokeepdiv.classList.remove('tc')
+//    cryptokeepdiv.classList.add('bb','bw1')
     const keeper = document.querySelector('#keeper')
     keeper.addEventListener('click', () => {
         summary()
+    })
+    const cryptoKeepTitle = document.querySelector('.cryptokeep')
+    cryptoKeepTitle.style.display = 'none'
+    const nav = document.querySelector('nav')
+    nav.classList.remove('dNone')
+    nav.id = 'navSum'
+    
+    const logout = document.querySelector('#logout')
+    logout.addEventListener('click', () => {
+        sessionStorage.removeItem('userID')
+        window.location.href = "./index.html"
     })
     
     const head = document.querySelector('head')
@@ -178,9 +196,9 @@ function summary() {
             <div class='addnew b ba b--solid b--black br1 pt1 pl2 pr2 grow pointer'>+</div>
             <ul class="list">
                 <li class="b bg-white dib">total wallet value</li>
-                <li class="netValue"> </li>
+                <li class="netValue">$loading...</li>
                 <li class="b bg-white dib">profit/loss</li>
-                <li class="netPL"> </li>
+                <li class="netPL">$loading...</li>
             </ul>
         </div>
     </div>
@@ -205,9 +223,9 @@ function summary() {
     
     
     bitButton.addEventListener('click', () => {
-        bitButton.style.backgroundColor = 'white'
-        liteButton.style.backgroundColor = 'none'
-        ethButton.style.backgroundColor = 'none'
+        bitButton.classList.add('bcSelected')
+        ethButton.classList.remove('bcSelected')
+        liteButton.classList.remove('bcSelected')
 //        const title = document.querySelector('.cryptokeep')
 //        title.classList.add('colorTitle')
         view = 'bitcoin'
@@ -231,7 +249,12 @@ function summary() {
         <h2 class="tc avenir tracked pl3 pt1 pr3 pb1 bg-white">${bitButton.innerHTML}</h2>
         <div class="stats">
             <div class="graph">
-                <img src="http://via.placeholder.com/800x460" alt="placeholder for graph">
+                <div onload="updateLineChart(timeArr, ethPriceArr)">
+                  <div class="box">
+                    <canvas id="lineChart" height="460" width="800"></canvas>
+                  </div>
+                  <script src="./scripts/charts.js" charset="utf-8"></script>
+                </div>
             </div>
             <div class="overviewStats">
                 <div class='addnew b ba b--solid b--black br1 pt1 pl2 pr2 grow pointer'>+</div>
@@ -257,16 +280,22 @@ function summary() {
         })
     })
     liteButton.addEventListener('click', () => {
-        liteButton.style.backgroundColor = 'white'
-        bitButton.style.backgroundColor = 'none'
-        ethButton.style.backgroundColor = 'none'
+        liteButton.classList.add('bcSelected')
+        ethButton.classList.remove('bcSelected')
+        bitButton.classList.remove('bcSelected')
+        
         view = 'litecoin'
         content.innerHTML = 
         `
         <h2 class="tc avenir tracked pl3 pt1 pr3 pb1 bg-white ">${liteButton.innerHTML}</h2>
         <div class="stats">
             <div class="graph">
-                <img src="http://via.placeholder.com/800x460" alt="placeholder for graph">
+                <div onload="updateLineChart(timeArr, ethPriceArr)">
+                  <div class="box">
+                    <canvas id="lineChart" height="460" width="800"></canvas>
+                  </div>
+                  <script src="./scripts/charts.js" charset="utf-8"></script>
+                </div>
             </div>
             <div class="overviewStats">
                 <div class='addnew b ba b--solid b--black br1 pt1 pl2 pr2 grow pointer'>+</div>
@@ -292,9 +321,9 @@ function summary() {
         })
     })
     ethButton.addEventListener('click', () => {
-        ethButton.style.backgroundColor = 'white'
-        bitButton.style.backgroundColor = 'none'
-        liteButton.style.backgroundColor = 'none'
+        ethButton.classList.add('bcSelected')
+        bitButton.classList.remove('bcSelected')
+        liteButton.classList.remove('bcSelected')
 //        const title = document.querySelector('.cryptokeep')
 //        title.classList.add('colorTitle')
         view = 'ethereum'
@@ -303,7 +332,12 @@ function summary() {
         <h2 class="tc avenir tracked pl3 pt1 pr3 pb1 bg-white ">${ethButton.innerHTML}</h2>
         <div class="stats">
             <div class="graph">
-                <img src="http://via.placeholder.com/800x460" alt="placeholder for graph">
+                <div onload="updateLineChart(timeArr, ethPriceArr)">
+                  <div class="box">
+                    <canvas id="lineChart" height="460" width="800"></canvas>
+                  </div>
+                  <script src="./scripts/charts.js" charset="utf-8"></script>
+                </div>
             </div>
             <div class="overviewStats">
                 <div class='addnew b ba b--solid b--black br1 pt1 pl2 pr2 grow pointer'>+</div>

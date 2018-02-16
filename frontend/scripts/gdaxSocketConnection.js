@@ -71,20 +71,18 @@ socket.onmessage = function(event) {
       netPL = allCoinMarket - (ethInvested + bitInvested + liteInvested)
       if (view == 'summary') {
         summaryDOM()
+          netPLPriceGraph()
       } else if (view == 'bitcoin') {
           bitcoinDOM()
+          btcPriceGraph()
       } else if (view == 'litecoin') {
           litecoinDOM()
+          ltcPriceGraph()
       } else if (view == 'ethereum') {
           ethereumDOM()
+          ethPriceGraph()
       }  
     })
-  
-//    ethPriceGraph()
-    btcPriceGraph()
-//    ltcPriceGraph()
-//    netPLPriceGraph()
-//    doens't work
   }
 }
 
@@ -149,5 +147,5 @@ function netPLPriceGraph() {
         }
     })
     console.log(timeArr)
-    console.log(netPLArr)
+    console.log(netPL)
 }

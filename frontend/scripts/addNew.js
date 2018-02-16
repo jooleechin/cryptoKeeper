@@ -1,10 +1,17 @@
 const newTransSubmit = document.querySelector('#formSubmit')
 const baseURL = 'http://localhost:3000'
 
+
 function currency(n) {
     n=parseFloat(n)
     return isNaN(n)?'loading...':n.toFixed(2)
 }
+
+const logout = document.querySelector('#logout')
+logout.addEventListener('click', () => {
+    sessionStorage.removeItem('userID')
+    window.location.href = "./index.html"
+})
 
 newTransSubmit.addEventListener('submit', (e) => {
     e.preventDefault()

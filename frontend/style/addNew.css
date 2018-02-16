@@ -9,6 +9,13 @@ body {
     color: #435058;
 }
 
+nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
 main {
     height: 100%;
     left: 0;
