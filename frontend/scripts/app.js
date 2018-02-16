@@ -70,8 +70,8 @@ signup.addEventListener('click', (e) => {
             <p>
             Hey there, I'm cryptoKeeper. You must be 
 
-            <input type="text" name="fname" placeholder="first name" class= "fName" required autocapitalize> 
-            <input type='text' name="lname" placeholder='last name' class= "lName" required autocapitalize>.<br>
+            <input type="text" name="fname" placeholder="first name" class= "fName" style='width:20%' required autocapitalize> 
+            <input type='text' name="lname" placeholder='last name' class= "lName" style='width:20%' required autocapitalize>.<br>
 
             Nice to meet you. I'm so excited for you to sign up with us so that you can keep track of your wallet value in <span class="light-purple">real time</span>.<br>
             Now let's set up your account; to login, I need an email from you (don't worry I won't spam you). My email is 
@@ -87,11 +87,12 @@ signup.addEventListener('click', (e) => {
             You are now ready to go! To check if you're a GOOD HUMAN click on <span class='thiss light-purple pointer dim'>this</span> (jk, it's just to see if you're spam or not).
             </p>
         </div>
-        <div class='tc mt5'>
+        <div class='tc mt4'>
             <button type='submit' value="submit" class="tracked btn btn-outline-secondary avenir" id="formComplete">submit</button>
         </div>
     </form>
     `
+    
     const signupButt = document.querySelector('.signupForm')
     signupButt.addEventListener('submit', (e) =>{
         e.preventDefault()

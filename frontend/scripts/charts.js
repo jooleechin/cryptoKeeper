@@ -37,6 +37,11 @@ function updateLineChart(time, liveData) {
             scales: {
                 xAxes: [{
                     type: 'time',
+                    title: {
+                        display: true,
+                        text: 'total wallet value',
+                        position: 'bottom'
+                    },
                     ticks: {
                         maxRotation: 90,
                         minRotation: 80
@@ -57,24 +62,5 @@ function updateLineChart(time, liveData) {
         if (ctx) {
           var lineChart = new Chart(ctx).Line(data, options);
         }
-//        let lineChart = new Chart(ctx, {
-//            type: 'line',
-//            data: data,
-//            options: options
-//        })
-    } else {
-//        lineChart.config.data = liveData
-        lineChart.datasets[0].data.value = liveData;
-        lineChart.update({
-            duration: 7000,
-            easing: 'none'
-        })
-    } 
+    }
 }
-
-//function reRenderChart(timeArr, ethPriceArr) {
-// destroy old chart;
-// create new chart based on updated timeArr and ethPriceArr;
-//}
-
-//setInterval(reRenderChart, 5000)
