@@ -1,44 +1,45 @@
 <!DOCTYPE html>
 <html>
     <head>
-    
+        <meta charset="utf-8">
+        <title>cryptoKeeper</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="style/summary.css">
+        <link rel="stylesheet" href="https://unpkg.com/tachyons@4.9.1/css/tachyons.min.css"/>
     </head>
-    <body>
-        <form>
-            <div>
-                <label for='coin'>Coin:</label>
-                <select name='typeOfCoin'>
-                    <option value='selectCoin' selected disabled>Please Select a Coin</option>
-                    <option value ='bitcoin'>Bitcoin</option>
-                    <option value='ethereum'>Etheruem</option>
-                    <option value='litecoin'>Litecoin</option>
-                </select>
-            </div>
-            <div>
-                <input type='checkbox' id='buyorsell' name='buyorsell' value="buy">
-                <label for='BuySell'>Buy</label>
-            </div>
-            <div>
-                <input type='checkbox' id='buyorsell' name='buyorsell' value="sell">
-                <label for='BuySell'>Sell</label>
-            </div>
-            <div>
-                <label for='quantity'>Quantity:</label>
-                <input type='number' id='quantity' name='quantity'>
-            </div>
-            <div>
-                <label for='purchase_price'>Purchase Price:</label>
-                <input type='number' id='price' name='price'>
-            </div>
-            <div>
-                <label for='purchase_date'>Purchase Date:</label>
-                <input type='date' id='date' name='date'>
-            </div>
-            <div>
-                <button type='submit' value="submit">Submit</button>
-            </div>
-        </form>
+    <body class="bg-washed-yellow calisto tracked">
+        <div class = "cryptokeep ml0 tc">
+            <h1 class="dib f-subheadline lh-title avenir tracked">cryptoKeeper</h1>
+        </div>       
+        
+        <main>
+            <form id="formLogin" class="tc f3 lh-copy">
+                <div class="pa3 pt4">
+                    <label for='email'>email:</label>
+                    <input type='email' id='email' name='email' class="pa2 br3" required autofocus>
+                </div>
+                <div class="pa3">
+                    <label for='password'>password:</label>
+                    <input type='password' id='password' name='password' class='pa2 br3' required>
+                </div>
+                <div class="pt4">
+                    <button type='submit' value="submit" class="tracked btn btn-outline-secondary calisto" id="login">login</button>
+                </div>
+                <div class="pt3">
+                    <button type='button' value="signup" class="tracked btn btn-outline-secondary calisto" id="signup">sign up</button>
+                </div>
+            </form>
+        </main>
+        
+        <script src="./scripts/charts.js" charset="utf-8"></script>
+        <script src="./scripts/moment.js" charset="utf-8"></script>
+        
+        
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <script src="/src/app.js" charset="utf-8"></script>
+        <script src="./scripts/app.js" charset="utf-8"></script>
+        <script src="./scripts/gdaxSocketConnection.js" charset="utf-8"></script>
+<!--        <script src="./scripts/moment.js" charset="utf-8"></script>-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
     </body>
+        
 </html>

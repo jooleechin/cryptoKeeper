@@ -1,60 +1,88 @@
 let crypto = require('../models/model')
 
+//login
+login = (req, res, next) => {
+    const {email, password} = req.body
+    crypto.comparePass(password, email)
+    .then(matches => {
+        res.json({matches})
+    })
+    .catch(e => next(e))
+}
+
+
+//overview
+getSummary = (req, res, next) => {
+   const user_id = req.params.user_id
+   const allCoins = [
+       crypto.getNet(user_id),
+       crypto.getQtyOfCoin('Bitcoin', user_id),
+       crypto.getNetByCoin('Bitcoin', user_id),
+       crypto.getQtyOfCoin('Ethereum', user_id),
+       crypto.getNetByCoin('Ethereum', user_id),
+       crypto.getQtyOfCoin('Litecoin', user_id),
+       crypto.getNetByCoin('Litecoin', user_id),
+       crypto.getAllTransByUser(user_id)
+   ]
+   Promise.all(allCoins)
+   .then(result => {
+       const format = {
+           'Total Invested' : result[0],
+           'Bitcoin' : result[1],
+           'NetInvestedinBitcoin' : result[2],
+           'Ethereum' : result[3],
+           'NetInvestedinEthereum' : result[4],
+           'Litecoin' : result[5],
+           'NetInvestedinLitecoin' : result[6],
+           'AllTransactions' : result[7]
+       }
+       res.json(format)
+   })
+}
+
 //individual
-getAllTransByUser = (req, res, next) => {
-    let user_id = req.params.user_id
-    crypto.getAllTransByUser(user_id)
-    .then (results => {
-        res.json(results)
-    })
-}
-
-getAllTransByUserByCoin = (req, res, next) => {
-    let user_id = req.params.user_id
-    let cointype = req.params.cointype
-    crypto.getAllTransByUserByCoin(user_id, cointype)
-    .then (results => {
-        if (results.length > 0) {
-            res.json(results)
-        } else {
-            res.status(404).json({message: `You have no ${cointype}!`})
-        }
-    })
-}
-
 createTrans = (req, res, next) => {
     let {user_id, type_of_coin, qty, purchase_price, isBuy} = req.body
     crypto.createTrans(user_id, type_of_coin, qty, purchase_price, isBuy) 
     .then (results => {
         res.json(results)
     })
-    .catch(err => nex(err))
+    .catch(err => next(err))
 }
 
-getNetByCoin = (req, res, next) => {
-    let user_id = req.params.user_id
-    let cointype = req.params.cointype
-    crypto.getNetByCoin(user_id, cointype)
+signup = (req, res, next) => {
+    let {firstName, lastName, email, password} = req.body
+    crypto.signup(firstName, lastName, email, password)
     .then (results => {
         res.json(results)
     })
     .catch(err => next(err))
 }
 
-getQtyByCoin = (req, res, next) => {
+getCoinSummary = (req, res, next) => {
     let user_id = req.params.user_id
     let cointype = req.params.cointype
-    crypto.getQtyByCoin(user_id, cointype)
-    .then (results => {
-        res.json(results)
+    const coinSumArr = [
+        crypto.getQtyByCoin(user_id, cointype),
+        crypto.getNetByCoin(user_id, cointype),
+        crypto.getAllTransByUserByCoin(user_id, cointype)
+    ]
+    Promise.all(coinSumArr)
+    .then(results => {
+        let format = {
+            'Total Holdings' : results[0],
+            'Total Invested' : results[1],
+            'Transactions' : results[2]
+        }
+        res.json(format)
     })
     .catch(err => next(err))
 }
 
 updateTrans = (req, res, next) => {
     const id = req.params.id
-    const { user_id, qty, purchase_price, isBuy } = req.body
-    crypto.updateTrans(id, user_id, qty, purchase_price, isBuy)
+    const { qty, purchase_price, isBuy } = req.body
+    crypto.updateTrans(id, qty, purchase_price, isBuy)
     .then (results => {
         res.json(results)
     })
@@ -63,41 +91,20 @@ updateTrans = (req, res, next) => {
 
 deleteTrans = (req, res, next) => {
     const id = req.params.id
-    const trans = crypto.deleteTrans(id)
+    crypto.deleteTrans(id)
     .then (results => {
         res.json(results)
     })
     .catch (err => next(err))
 }
 
-//overview
-
-getSummary = (req, res, next) => {
-   crypto.getNet(id).then(result => {
-       return crypto.getQtyByCoin('Bitcoin')
-   }).then (result => {
-       res.json(result)
-   })
-}
-
-getNet = (req, res, next) => {
-    let user_id = req.params.user_id
-    crypto.getNet(id)
-    .then (result => {
-        res.json(result)
-    })
-    .catch (err => next(err))
-}
-
 
 module.exports = {
-    getAllTransByUser,
-    getAllTransByUserByCoin,
     createTrans,
-    getNetByCoin,
-    getQtyByCoin,
+    getSummary,
+    getCoinSummary,
     updateTrans,
     deleteTrans,
-    getSummary,
-    getNet
+    login,
+    signup
 }

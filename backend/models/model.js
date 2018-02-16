@@ -1,8 +1,4 @@
 let knex = require('../db')
-function userTrans () {
-    return knex('transactions')
-    .join ('users', 'transactions.user_id', 'users.id')
-}
     
 //individual
 function getAllTransByUser(user_id) {
@@ -36,7 +32,7 @@ function createTrans(user_id, type_of_coin, qty, purchase_price, isBuy) {
     .returning('*')
 }
 
-function getNetByCoin(user_id, cointype) {
+function getNetByCoin(cointype, user_id) {
     return knex('transactions')
     .where({
         'transactions.user_id': user_id,
@@ -72,16 +68,15 @@ function getQtyByCoin(user_id, cointype) {
     })
 }
 
-function updateTrans(id, user_id, qty, purchase_price, isBuy) {
+function updateTrans(id, qty, purchase_price, isBuy) {
     return knex('transactions')
     .where('transactions.id', id)
-    .first()
-    .then (foundTrans => {
-        foundTrans.user_id = user_id
-        foundTrans.qty = qty
-        foundTrans.purchase_price = purchase_price
-        foundTrans.isBuy = isBuy
+    .update({
+        qty,
+        purchase_price,
+        isBuy
     })
+    .returning('*')
     .then (result => {
         return result
     })
@@ -91,20 +86,17 @@ function deleteTrans(id) {
     return knex('transactions')
     .where('transactions.id', id)
     .del()
+    .returning('*')
 }
 
 //overview
-function getNet(user_id) {
-    return userTrans
-    .then (resultsArr => {
-        return resultsArr.reduce((memo, ele) => {
-            return memo + (ele.qty * ele.purchase_price)
-        }, 0)
-    })
-}
 
-function getQtyOfCoin(coin) {
-    return userTrans
+function getQtyOfCoin(coin, user_id) {
+    return knex('transactions')
+    .where({
+        'transactions.type_of_coin': coin,
+        'transactions.user_id': user_id
+    })
     .then (resultsArr => {
         return resultsArr.filter(ele => {
             return ele.type_of_coin === coin
@@ -117,31 +109,50 @@ function getQtyOfCoin(coin) {
     })
 }
 
-//function getMarketValue(user_id) {
-//    return knex('transactions')
-//    .join ('users', 'transactions.user_id', 'users.id')
-//    .where('transactions.user_id', user_id)
-//    .then (resultsArr => {
-//        return resultsArr.qty
-//    })
-//}
+function getNet(user_id) {
+    return knex('transactions')
+    .where('user_id', user_id)
+    .then (resultsArr => {
+        return resultsArr.reduce((memo, ele) => {
+            return memo + (ele.qty * ele.purchase_price)
+        }, 0)
+    })
+}
 
-//function getProfitLoss(user_id) {
-//    return knex('transactions')
-//    .join ('users', 'transactions.user_id', 'users.id')
-//    .where('transactions.user_id', user_id)
-//    .then (resultsArr => {
-//        if (resultsArr.isBuy) {
-//            return resultsArr.reduce((memo, ele) => {
-//                return getNet(user_id) - memo + (ele.qty * ele.purchase_price)
-//            }, 0)
-//        } else {
-//            return resultsArr.reduce((memo, ele) => {
-//                return memo - (ele.qty * ele.purchase_price)
-//            }, 0)
-//        }
-//    })
-//}
+function getMarketValue(user_id) {
+    return knex('transactions')
+    .join ('users', 'transactions.user_id', 'users.id')
+    .where('transactions.user_id', user_id)
+    .then (resultsArr => {
+        return resultsArr.qty
+    })
+}
+
+function comparePass(password, email) {
+    return knex('users')
+    .where({
+        'password': password,
+        'email': email
+    }) 
+    .first()
+    .then (result => {
+        if (result) {
+            return result
+        }
+        return false
+    })
+}
+
+function signup(firstName, lastName, email, password) {
+    return knex('users')
+    .insert({
+        firstName,
+        lastName,
+        email,
+        password
+    })
+    .returning('*')
+}
 
 
 module.exports = {
@@ -155,6 +166,7 @@ module.exports = {
     deleteTrans,
     //individual
     getNet,
-    getQtyOfCoin
-    
+    getQtyOfCoin,
+    comparePass,
+    signup
 }

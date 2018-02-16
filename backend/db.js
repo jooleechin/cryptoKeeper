@@ -1,5 +1,5 @@
-let config = require('./knexfile.js')
 let env = 'development'
-let knex = require('knex')(config[env])
+let config = require('./knexfile.js')[env]
+let knex = require('knex')(config)
 
 module.exports = knex

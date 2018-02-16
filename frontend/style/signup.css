@@ -1,0 +1,32 @@
+html{
+    max-height: 100%;
+    max-width: 95%;
+    margin: auto;
+    color: #435058;
+}
+
+body {
+    color: #435058;
+}
+
+.letter {
+    font-size: 30px;
+    max-width: 70%;
+    margin: auto;
+}
+
+.letter input:placeholder-shown {
+    border: none;
+    background-color: none;
+    display: inline-block;
+    width: 20%;
+}
+
+.thiss:hover {
+    border-bottom: 1px solid;
+}
+
+#formComplete {
+    font-size: 25px;
+}
+

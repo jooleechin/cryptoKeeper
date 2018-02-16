@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>add new</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://unpkg.com/tachyons@4.9.1/css/tachyons.min.css"/>
+        <link rel="stylesheet" href="./style/addNew.css">
+    </head>
+    <body class="bg-washed-yellow calisto tracked">
+        <main>
+        <h1 class="tl lh-title avenir tracked pt3 pointer dim" id="keeper">cryptoKeeper</h1>
+        <h2 class="dib avenir bg-white pl3 pt1 pr3 pb1 title">add new transaction</h2>
+        <form class="tc f4 newTrans" id="formSubmit">
+            <div class="coin tc">
+                <div class="pr3">
+                    <label for='coin'>coin:</label>
+                    <select name='typeOfCoin' class="calisto" id="coins" required>
+                        <option value='' selected disabled class="calisto">Please Select a Coin</option>
+                        <option value ='bitcoin'>Bitcoin</option>
+                        <option value='ethereum'>Ethereum</option>
+                        <option value='litecoin'>Litecoin</option>
+                    </select>
+                </div> <!--end of coin selection-->
+                <div>
+                    <div>
+                        <input type='radio' id='buyorsell' name='buyorsell' value="buy" required>
+                        <label for='BuySell'>buy</label>
+                    </div>
+                    <div>
+                        <input type='radio' id='buyorsell' name='buyorsell' value="sell" required>
+                        <label for='BuySell'>sell</label>
+                    </div>
+                </div> <!--end of isBuy-->
+            </div> <!--end of coin-->
+            <div>
+                <label for='quantity'>quantity:</label>
+                <input type='number' id='quantity' name='quantity' required>
+            </div>
+            <div>
+                <label for='purchase_price'>purchase price:</label>
+                <input type='number' id='price' name='price' required>
+            </div>
+            <div>
+                <button type='submit' value="submit" id="submit" class="tracked btn btn-outline-secondary calisto mt4">submit</button>
+            </div>
+        </form>
+        <h3 class="status tc avenir mt5"></h3>
+        </main>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="./scripts/addNew.js" charset="utf-8"></script>
+        <script src="./scripts/gdaxSocketConnection.js" charset="utf-8"></script>
+    </body>
+</html>
