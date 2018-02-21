@@ -33,7 +33,7 @@ const netPLArr = []
 
 let initialized = false
 
-let view = 'login'
+let view = 'newTrans'
 
 let liveData
 let time
@@ -52,7 +52,7 @@ socket.onmessage = function(event) {
   let data = JSON.parse(event.data) //changing to obj to work with
   let userID = Number(sessionStorage.getItem('userID'))
   time = data.time
-  if (userID) {
+  if (userID && view != 'newTrans') {
       getCoins().then(() => {
       if (data.product_id == 'ETH-USD') {
           ethPrice = data.price

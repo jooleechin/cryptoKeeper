@@ -17,11 +17,11 @@ function updateLineChart(time, liveData) {
                     data: liveData
                 }
             ]
-        };
-        if (time.length > 10) {
+        }
+        if (time.length > 12) {
             time.shift()
         }
-        if(liveData.length > 10) {
+        if(liveData.length > 12) {
             liveData.shift()
         }
         
@@ -43,8 +43,10 @@ function updateLineChart(time, liveData) {
                         position: 'bottom'
                     },
                     ticks: {
+                        autoSkip: true,
                         maxRotation: 90,
-                        minRotation: 80
+                        minRotation: 80,
+                        maxTicksLimit: 20
                     },
                     time: {
                         format: 'HH:mm',

@@ -9,17 +9,6 @@ function getAllTransByUser(user_id) {
     })
 }
 
-function getAllTransByUserByCoin(user_id, cointype) {
-    return knex('transactions')
-    .where({
-        'transactions.user_id': user_id,
-        'transactions.type_of_coin': cointype
-    })
-    .then (results => {
-        return results
-    }
-)}
-
 function createTrans(user_id, type_of_coin, qty, purchase_price, isBuy) {
     return knex('transactions')
     .insert({
@@ -32,41 +21,7 @@ function createTrans(user_id, type_of_coin, qty, purchase_price, isBuy) {
     .returning('*')
 }
 
-function getNetByCoin(cointype, user_id) {
-    return knex('transactions')
-    .where({
-        'transactions.user_id': user_id,
-        'transactions.type_of_coin': cointype
-    })
-    .then (results => {
-        return results.filter(ele => {
-            return ele.type_of_coin === cointype
-        })
-    })
-    .then (results => {
-        return results.reduce((memo, ele) => {
-            return memo + (ele.qty * ele.purchase_price)
-        }, 0)
-    })
-}
 
-function getQtyByCoin(user_id, cointype) {
-    return knex('transactions')
-    .where({
-        'transactions.user_id': user_id,
-        'transactions.type_of_coin': cointype
-    })
-    .then (results => {
-        return results.filter(ele => {
-            return ele.type_of_coin === cointype
-        })
-    })
-    .then (results => {
-        return results.reduce((memo, ele) => {
-            return memo + ele.qty
-        }, 0)
-    })
-}
 
 function updateTrans(id, qty, purchase_price, isBuy) {
     return knex('transactions')
@@ -89,17 +44,16 @@ function deleteTrans(id) {
     .returning('*')
 }
 
-//overview
-
-function getQtyOfCoin(coin, user_id) {
+//getCoinSummary
+function getQtyByCoin(user_id, cointype) {
     return knex('transactions')
     .where({
-        'transactions.type_of_coin': coin,
-        'transactions.user_id': user_id
+        'transactions.user_id': user_id,
+        'transactions.type_of_coin': cointype
     })
-    .then (resultsArr => {
-        return resultsArr.filter(ele => {
-            return ele.type_of_coin === coin
+    .then (results => {
+        return results.filter(ele => {
+            return ele.type_of_coin === cointype
         })
     })
     .then (results => {
@@ -108,6 +62,36 @@ function getQtyOfCoin(coin, user_id) {
         }, 0)
     })
 }
+
+function getNetByCoin(user_id, cointype) {
+    return knex('transactions')
+    .where({
+        'transactions.user_id': user_id,
+        'transactions.type_of_coin': cointype
+    })
+    .then (results => {
+        return results.filter(ele => {
+            return ele.type_of_coin === cointype
+        })
+    })
+    .then (results => {
+        return results.reduce((memo, ele) => {
+            return memo + (ele.qty * ele.purchase_price)
+        }, 0)
+    })
+}
+
+function getAllTransByUserByCoin(user_id, cointype) {
+    return knex('transactions')
+    .where({
+        'transactions.user_id': user_id,
+        'transactions.type_of_coin': cointype
+    })
+    .then (results => {
+        return results
+    }
+)}
+/*done with getcoinSummary*/
 
 function getNet(user_id) {
     return knex('transactions')
@@ -166,7 +150,6 @@ module.exports = {
     deleteTrans,
     //individual
     getNet,
-    getQtyOfCoin,
     comparePass,
     signup
 }

@@ -16,12 +16,12 @@ getSummary = (req, res, next) => {
    const user_id = req.params.user_id
    const allCoins = [
        crypto.getNet(user_id),
-       crypto.getQtyOfCoin('Bitcoin', user_id),
-       crypto.getNetByCoin('Bitcoin', user_id),
-       crypto.getQtyOfCoin('Ethereum', user_id),
-       crypto.getNetByCoin('Ethereum', user_id),
-       crypto.getQtyOfCoin('Litecoin', user_id),
-       crypto.getNetByCoin('Litecoin', user_id),
+       crypto.getQtyByCoin(user_id, 'Bitcoin'),
+       crypto.getNetByCoin(user_id, 'Bitcoin'),
+       crypto.getQtyByCoin(user_id, 'Ethereum'),
+       crypto.getNetByCoin(user_id, 'Ethereum'),
+       crypto.getQtyByCoin(user_id, 'Litecoin'),
+       crypto.getNetByCoin(user_id, 'Litecoin'),
        crypto.getAllTransByUser(user_id)
    ]
    Promise.all(allCoins)

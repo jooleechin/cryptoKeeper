@@ -1,4 +1,5 @@
 const newTransSubmit = document.querySelector('#formSubmit')
+//const baseURL = 'https://bitkeeper.herokuapp.com/'
 const baseURL = 'http://localhost:3000'
 
 
@@ -14,6 +15,9 @@ logout.addEventListener('click', () => {
 })
 
 newTransSubmit.addEventListener('submit', (e) => {
+    
+    view == 'newTrans'
+    console.log(view)
     e.preventDefault()
     const coin = document.querySelector('#coins')
     let quantity = document.querySelector('#quantity')
@@ -46,5 +50,6 @@ newTransSubmit.addEventListener('submit', (e) => {
 
 //const keeper = document.querySelector('#keeper')
 //keeper.addEventListener('click', () => {
-//    summary()
+//    //summary()
+//    window.location.replace('/')
 //})
