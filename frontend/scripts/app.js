@@ -22,11 +22,6 @@ function getCoins() {
     })
 }
 
-//function getTransByCoin() {
-//    return axios.get(`${baseURL}/summary/user/${Number(sessionStorage.getItem('userID'))}/coin/:cointype`)
-//}
-
-
 loginButton.addEventListener('submit', (e) => { //just get user id and to see if it matches
     e.preventDefault()
     const email = document.querySelector('#email').value
@@ -52,15 +47,74 @@ function currency(n) {
 
 function getAllTrans() {
     let transactions
-    let newRow = document.querySelector('.tableRow')
-    let qty = document.querySelector('.tQty span')
-    let price = document.querySelector('.tPrice span')
-    let buySell = document.querySelector('.tBuySell span')
-    let total = document.querySelector('.tTotal span')
     let table = document.querySelector('#table')
     return axios.get(`${baseURL}/summary/user/${Number(sessionStorage.getItem('userID'))}`)
     .then (data => {
         transactions = data.data.AllTransactions
+        console.log(transactions)
+        return transactions.forEach(ele => {
+            const type = ele.type_of_coin
+            const newQty = ele.qty
+            const newPrice = ele.purchase_price
+            let newBS = ele.isBuy
+            const total = newQty * newPrice
+            
+            const newDiv = document.createElement('div')
+            newDiv.classList.add('TD')
+            const newSpan = document.createElement('span')
+            newSpan.innerHTML = type
+            newDiv.appendChild(newSpan)
+            
+            const newDiv1 = document.createElement('div')
+            newDiv1.classList.add('TD')
+            const newSpan1 = document.createElement('span')
+            newSpan1.innerHTML = newQty
+            newDiv1.appendChild(newSpan1)
+            
+            const newDiv2 = document.createElement('div')
+            newDiv2.classList.add('TD')
+            const newSpan2 = document.createElement('span')
+            newSpan2.innerHTML = `$${currency(newPrice)}`
+            newDiv2.appendChild(newSpan2)
+            
+            const newDiv3 = document.createElement('div')
+            newDiv3.classList.add('TD')
+            const newSpan3 = document.createElement('span')
+            if (newBS) {
+                newBS = 'buy'
+            } else {
+                newBS = 'sell'
+            }
+            newSpan3.innerHTML = newBS
+            newDiv3.appendChild(newSpan3)
+            
+            const newDiv4 = document.createElement('div')
+            newDiv4.classList.add('TD')
+            const newSpan4 = document.createElement('span')
+            newSpan4.innerHTML = `$${currency(total)}`
+            newDiv4.appendChild(newSpan4)
+            
+            const row = document.createElement('div')
+            row.classList.add('tableRow')
+            //create and add row 
+            row.appendChild(newDiv)
+            row.appendChild(newDiv1)
+            row.appendChild(newDiv2)
+            row.appendChild(newDiv3)
+            row.appendChild(newDiv4)
+            
+            table.appendChild(row)
+            return table
+        })
+    })
+}
+
+function getTransByCoin() {
+    let transactions
+    let table = document.querySelector('#table')
+    return axios.get(`${baseURL}/summary/user/${Number(sessionStorage.getItem('userID'))}/coin/${view}`)
+    .then (data => {
+        transactions = data.data.Transactions
         return transactions.forEach(ele => {
             const newQty = ele.qty
             const newPrice = ele.purchase_price
@@ -105,7 +159,6 @@ function getAllTrans() {
             row.appendChild(newDiv4)
             
             table.appendChild(row)
-            console.log(row)
             return table
         })
     })
@@ -113,11 +166,13 @@ function getAllTrans() {
 
 signup.addEventListener('click', (e) => {
     e.preventDefault()    
-    const h1 = document.querySelector('.cryptokeep h1')
+    const h1 = document.querySelector('.splashTitle h1')
+    const nav = document.querySelector('nav')
+    nav.classList.remove('pb4')
     h1.style.display = 'inline-block'
-    h1.className = 'tl pt4 avenir tracked lh-title dim pointer' 
+    h1.classList.add('tl', 'pt4', 'avenir', 'tracked', 'lh-title', 'dim', 'pointer') 
     h1.id = 'keeperLog'
-    const cryptokeepdiv = document.querySelector('.cryptokeep')
+    const cryptokeepdiv = document.querySelector('.splashTitle')
 
     cryptokeepdiv.style.display = 'none'
     const logout = document.querySelector('#logout')
@@ -201,7 +256,7 @@ signup.addEventListener('click', (e) => {
 })
 
 function hi() {
-    const h1 = document.querySelector('.cryptokeep')
+    const h1 = document.querySelector('.splashTitle')
     h1.style.display = 'none'
     main.innerHTML =
         `
@@ -218,7 +273,7 @@ function summary() {
     keeper.addEventListener('click', () => {
         summary()
     })
-    const cryptoKeepTitle = document.querySelector('.cryptokeep')
+    const cryptoKeepTitle = document.querySelector('.splashTitle')
     cryptoKeepTitle.style.display = 'none'
     const nav = document.querySelector('nav')
     nav.classList.remove('dNone')
@@ -264,25 +319,13 @@ function summary() {
         <h2 class="dib tc avenir bg-white pl3 pr3 tracked">transactions</h2>
         <div class="table" id="table">
             <div class="tableRow tableHeader avenir f4">
-                <div class="TD"">quantity</div>
+                <div class="TD">coin type</div>
+                <div class="TD">quantity</div>
                 <div class="TD">price</div>
                 <div class="TD">buy/sell</div>
                 <div class="TD">total</div>
             </div>
-            <div class="tableRow">
-                <div class="TD tQty"style="justify-content: center">
-                  <span>41</span>
-                </div>
-                <div class="TD tPrice"style="justify-content: center">
-                  <span>$</span>
-                </div>
-                <div class="TD tBuySell"style="justify-content: center">
-                  <span>27</span>
-                </div>
-                <div class="TD tTotal"style="justify-content: center">
-                  <span>$176.15</span>
-                </div>
-            </div>
+            <div class="tableRow"></div>
         </div>
     </div>
 </div>
@@ -309,7 +352,7 @@ function summary() {
         bitButton.classList.add('bcSelected')
         ethButton.classList.remove('bcSelected')
         liteButton.classList.remove('bcSelected')
-        view = 'bitcoin'
+        view = 'Bitcoin'
         
         content.innerHTML = 
         `
@@ -338,7 +381,20 @@ function summary() {
                 </ul>
             </div>
         </div>
+        <div class="transactions">
+            <h2 class="dib tc avenir bg-white pl3 pr3 tracked">transactions</h2>
+            <div class="table" id="table">
+                <div class="tableRow tableHeader avenir f4">
+                    <div class="TD"">quantity</div>
+                    <div class="TD">price</div>
+                    <div class="TD">buy/sell</div>
+                    <div class="TD">total</div>
+                </div>
+                <div class="tableRow"></div>
+            </div>
+        </div>
         `
+        getTransByCoin()
         const addnewButt = document.querySelector('.addnew')
         addnewButt.addEventListener('click', () => {
             window.location.href = "./addNew.html"
@@ -348,8 +404,7 @@ function summary() {
         liteButton.classList.add('bcSelected')
         ethButton.classList.remove('bcSelected')
         bitButton.classList.remove('bcSelected')
-        
-        view = 'litecoin'
+        view = 'Litecoin'
         content.innerHTML = 
         `
         <h2 class="tc avenir tracked pl3 pt1 pr3 pb1 bg-white ">${liteButton.innerHTML}</h2>
@@ -377,7 +432,20 @@ function summary() {
                 </ul>
             </div>
         </div>
+        <div class="transactions">
+            <h2 class="dib tc avenir bg-white pl3 pr3 tracked">transactions</h2>
+            <div class="table" id="table">
+                <div class="tableRow tableHeader avenir f4">
+                    <div class="TD"">quantity</div>
+                    <div class="TD">price</div>
+                    <div class="TD">buy/sell</div>
+                    <div class="TD">total</div>
+                </div>
+                <div class="tableRow"></div>
+            </div>
+        </div>
         `
+        getTransByCoin()
         const addnewButt = document.querySelector('.addnew')
         addnewButt.addEventListener('click', () => {
             window.location.href = "./addNew.html"
@@ -387,9 +455,7 @@ function summary() {
         ethButton.classList.add('bcSelected')
         bitButton.classList.remove('bcSelected')
         liteButton.classList.remove('bcSelected')
-//        const title = document.querySelector('.cryptokeep')
-//        title.classList.add('colorTitle')
-        view = 'ethereum'
+        view = 'Ethereum'
         content.innerHTML = 
         `
         <h2 class="tc avenir tracked pl3 pt1 pr3 pb1 bg-white ">${ethButton.innerHTML}</h2>
@@ -417,39 +483,26 @@ function summary() {
                 </ul>
             </div>
         </div>
+        <div class="transactions">
+            <h2 class="dib tc avenir bg-white pl3 pr3 tracked">transactions</h2>
+            <div class="table" id="table">
+                <div class="tableRow tableHeader avenir f4">
+                    <div class="TD"">quantity</div>
+                    <div class="TD">price</div>
+                    <div class="TD">buy/sell</div>
+                    <div class="TD">total</div>
+                </div>
+                <div class="tableRow"></div>
+            </div>
+        </div>
         `
+        getTransByCoin()
         const addnewButt = document.querySelector('.addnew')
         addnewButt.addEventListener('click', () => {
             window.location.href = "./addNew.html"
         })
     })
 }
-
-//<div class="transactions">
-//    <h2 class="tc">transactions</h2>
-//    <div class="table">
-//        <div class="tableRow tableHeader">
-//            <div class="TD"">quantity</div>
-//            <div class="TD">price</div>
-//            <div class="TD">buy/sell</div>
-//            <div class="TD">total</div>
-//        </div>
-//        <div class="tableRow">
-//            <div class="TD tQty"style="justify-content: center">
-//              <span>41</span>
-//            </div>
-//            <div class="TD tPrice"style="justify-content: center">
-//              <span>$</span>
-//            </div>
-//            <div class="TD tBuySell"style="justify-content: center">
-//              <span>27</span>
-//            </div>
-//            <div class="TD tTotal"style="justify-content: center">
-//              <span>$176.15</span>
-//            </div>
-//        </div>
-//    </div>
-//</div>
 
 function summaryDOM() {
     let netValue = document.querySelector('.netValue')

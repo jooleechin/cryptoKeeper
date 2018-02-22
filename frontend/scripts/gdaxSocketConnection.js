@@ -72,13 +72,13 @@ socket.onmessage = function(event) {
       if (view == 'summary') {
         summaryDOM()
           netPLPriceGraph()
-      } else if (view == 'bitcoin') {
+      } else if (view == 'Bitcoin') {
           bitcoinDOM()
           btcPriceGraph()
-      } else if (view == 'litecoin') {
+      } else if (view == 'Litecoin') {
           litecoinDOM()
           ltcPriceGraph()
-      } else if (view == 'ethereum') {
+      } else if (view == 'Ethereum') {
           ethereumDOM()
           ethPriceGraph()
       }  

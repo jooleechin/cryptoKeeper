@@ -34,6 +34,10 @@ nav {
     height: 20%;
 }
 
+#formLogin {
+    margin-top: 10%;
+}
+
 main {
     bottom: 0;
     width: 100%;
@@ -41,15 +45,14 @@ main {
     position: absolute;
 }
 
-.cryptokeep {
+.splashTitle {
     width: 100%;
     height: auto;
-    padding-left: 2.5%;
-    display: block;
+    margin-top: 8%;
 }
 
-.cryptokeep h1 {
-    font-size: 80px;
+.splashTitle h1 {
+    margin: 0;
 }
 
 .bcSelected {
