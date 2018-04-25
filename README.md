@@ -26,3 +26,6 @@
 
 ## Portfolio Management:
 ![Alt text](./frontend/assets/transactions.png)
+
+## Add New Transaction:
+![Alt text](./frontend/assets/add.png)
