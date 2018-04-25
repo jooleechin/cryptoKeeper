@@ -38,6 +38,10 @@ nav {
     margin-top: 10%;
 }
 
+.none {
+    display: none;
+}
+
 main {
     bottom: 0;
     width: 100%;

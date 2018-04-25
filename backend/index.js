@@ -6,7 +6,6 @@ let app = express()
 app.use(cors())
 app.use(bodyParser.json()) //gives you access to req.body
 
-let transactions = require('./models/model')
 let controller = require('./controllers/controller')
 
 app.post('/transactions', controller.createTrans)

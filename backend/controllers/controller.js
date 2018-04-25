@@ -14,6 +14,12 @@ login = (req, res, next) => {
 //overview
 getSummary = (req, res, next) => {
    const user_id = req.params.user_id
+//   crypto.getAllUserCoinsAndValue(user_id, 'Bitcoin', 'Ethereum', 'Litecoin')
+//    .then(result => {
+//       res.json(result)
+//    })
+//    .catch(e => next(e))
+
    const allCoins = [
        crypto.getNet(user_id),
        crypto.getQtyByCoin(user_id, 'Bitcoin'),

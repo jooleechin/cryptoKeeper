@@ -1,6 +1,6 @@
 const newTransSubmit = document.querySelector('#formSubmit')
-//const baseURL = 'https://bitkeeper.herokuapp.com/'
-const baseURL = 'http://localhost:3000'
+const baseURL = 'https://bitkeeper.herokuapp.com'
+//const baseURL = 'http://localhost:3000'
 
 
 function currency(n) {
@@ -17,16 +17,18 @@ logout.addEventListener('click', () => {
 newTransSubmit.addEventListener('submit', (e) => {
     
     view == 'newTrans'
-    console.log(view)
     e.preventDefault()
     const coin = document.querySelector('#coins')
     let quantity = document.querySelector('#quantity')
     let price = document.querySelector('#price')
-    let bought = document.querySelector('#buyorsell')
-    if (bought.value == 'buy') {
-        bought = true
-    } else {
-        bought = false
+    let selection
+    let bought = document.querySelector('#buy')
+    let sold = document.querySelector('#sell')
+    
+    if (bought.checked) {
+        selection = true
+    } else if (sold.checked){
+        selection = false
     }
     let UserID = Number(sessionStorage.getItem('userID')) 
     const status = document.querySelector('.status')
@@ -35,21 +37,15 @@ newTransSubmit.addEventListener('submit', (e) => {
         type_of_coin: coin.options[coin.selectedIndex].innerHTML,
         qty: quantity.value,
         purchase_price: price.value,
-        isBuy: bought
+        isBuy: selection
     }
     if (newTrans) {
         axios.post(`${baseURL}/transactions`, newTrans)
         .then (result => {
             status.innerHTML = 'yay! you have successfully entered in your transaction!'
-            console.log(result)
+            console.log(result.data[0].isBuy)
 
         })
         .catch(e => console.log(e))
     }
 })
-
-//const keeper = document.querySelector('#keeper')
-//keeper.addEventListener('click', () => {
-//    //summary()
-//    window.location.replace('/')
-//})

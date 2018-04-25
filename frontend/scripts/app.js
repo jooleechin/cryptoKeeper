@@ -2,8 +2,8 @@ const signup = document.querySelector('#signup')
 let loginButton = document.querySelector('#formLogin')
 const main = document.querySelector('main')
 let userID = Number(sessionStorage.getItem('userID'))
-const baseURL = 'http://localhost:3000'
-//const baseURL = 'https://bitkeeper.herokuapp.com'
+//const baseURL = 'http://localhost:3000'
+const baseURL = 'https://bitkeeper.herokuapp.com'
 //let eachTransaction
 
 function getCoins() {
@@ -51,7 +51,6 @@ function getAllTrans() {
     return axios.get(`${baseURL}/summary/user/${Number(sessionStorage.getItem('userID'))}`)
     .then (data => {
         transactions = data.data.AllTransactions
-        console.log(transactions)
         return transactions.forEach(ele => {
             const type = ele.type_of_coin
             const newQty = ele.qty
@@ -84,6 +83,7 @@ function getAllTrans() {
                 newBS = 'buy'
             } else {
                 newBS = 'sell'
+                newSpan3.classList.add('sell')
             }
             newSpan3.innerHTML = newBS
             newDiv3.appendChild(newSpan3)
@@ -91,19 +91,53 @@ function getAllTrans() {
             const newDiv4 = document.createElement('div')
             newDiv4.classList.add('TD')
             const newSpan4 = document.createElement('span')
-            newSpan4.innerHTML = `$${currency(total)}`
-            newDiv4.appendChild(newSpan4)
+            newSpan4.innerHTML = `$${currency(total)}`    
+            newDiv4.appendChild(newSpan4) 
+            
+            const newDiv5 = document.createElement('div')
+            newDiv5.classList.add('TD', 'update')
+            const edit = document.createElement('div')
+            edit.innerHTML = `<img src="./assets/edit.gif" alt="edit">`
+            edit.classList.add('mr1', 'pointer', 'edit')
+            const deleteIcon = document.createElement('div')
+            deleteIcon.innerHTML = `<img src="./assets/delete.png" alt="delete">`
+            deleteIcon.classList.add('delete', 'pointer')
+            newDiv5.appendChild(edit)
+            newDiv5.appendChild(deleteIcon)
             
             const row = document.createElement('div')
             row.classList.add('tableRow')
+                        
+            if (newSpan3.innerHTML == 'sell') {
+                newSpan.classList.add('sell')
+                newSpan1.classList.add('sell')                
+                newSpan2.classList.add('sell')
+                newSpan4.classList.add('sell')
+            }
+            
             //create and add row 
             row.appendChild(newDiv)
             row.appendChild(newDiv1)
             row.appendChild(newDiv2)
             row.appendChild(newDiv3)
             row.appendChild(newDiv4)
+            row.appendChild(newDiv5)
             
             table.appendChild(row)
+            
+//            let count = 0
+//            table.addEventListener('click', e => {
+//                console.log(count++)
+//                console.log('table clicked', e.target)
+//                
+//                // determine what was clicked in the table
+//                
+//                // if it isn't something valid to click. Do nothing.
+//                
+//                // otherwise, determine if this is an edit or delete operation
+//                
+//                // look up information in that row
+//            })
             return table
         })
     })
@@ -134,13 +168,14 @@ function getTransByCoin() {
             newDiv2.appendChild(newSpan2)
             
             const newDiv3 = document.createElement('div')
-            newDiv3.classList.add('TD')
+            newDiv3.classList.add('TD')         
             const newSpan3 = document.createElement('span')
             if (newBS) {
                 newBS = 'buy'
             } else {
                 newBS = 'sell'
-            }
+                newSpan3.classList.add('sell')   
+            }            
             newSpan3.innerHTML = newBS
             newDiv3.appendChild(newSpan3)
             
@@ -152,6 +187,14 @@ function getTransByCoin() {
             
             const row = document.createElement('div')
             row.classList.add('tableRow')
+            
+            
+            if (newSpan3.innerHTML == 'sell') {
+                newSpan.classList.add('sell')
+                newSpan2.classList.add('sell')
+                newSpan4.classList.add('sell')
+            }
+            
             //create and add row 
             row.appendChild(newDiv)
             row.appendChild(newDiv2)
@@ -163,6 +206,7 @@ function getTransByCoin() {
         })
     })
 }
+
 
 signup.addEventListener('click', (e) => {
     e.preventDefault()    
@@ -240,8 +284,6 @@ signup.addEventListener('click', (e) => {
         if (newUser) {
             axios.post(`${baseURL}/users`, newUser)
             .then (data => {
-                
-                console.log(data)
                 main.innerHTML = 
                 `
                 <div class='tc avenir mt6 f2 tracked'>
@@ -324,8 +366,19 @@ function summary() {
                 <div class="TD">price</div>
                 <div class="TD">buy/sell</div>
                 <div class="TD">total</div>
+                <div class="update TD"></div>
+                
             </div>
-            <div class="tableRow"></div>
+            <div class="tableRow">
+                <div class="none"><span></span></div>
+                <div class="none"><span></span></div>
+                <div class="none"><span></span></div>
+                <div class="none"><span></span></div>
+                <div class="none update">
+                    <div class="edit"></div>
+                    <div class="deleteIcon"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -336,7 +389,13 @@ function summary() {
 </div>
 `
     getAllTrans()
+    document.querySelector('.table').addEventListener('load', () => {
+        alert('yay!')
+        console.log('yay!')
+    })
+    
     view = 'summary'
+    
     const bitButton = document.querySelector('.bitcoin')
     const liteButton = document.querySelector('.litecoin')
     const ethButton = document.querySelector('.ethereum')

@@ -98,8 +98,8 @@ function ethPriceGraph() {
             return ethPriceArr
         }
     })
-    console.log(timeArr)
-    console.log(ethPriceArr)
+//    console.log(timeArr)
+//    console.log(ethPriceArr)
 }
 
 function btcPriceGraph() {
@@ -114,8 +114,8 @@ function btcPriceGraph() {
             return btcPriceArr
         }
     })
-    console.log(timeArr)
-    console.log(bitPriceArr)
+//    console.log(timeArr)
+//    console.log(bitPriceArr)
 }
 
 function ltcPriceGraph() {
@@ -130,8 +130,8 @@ function ltcPriceGraph() {
             return litePriceArr
         }
     })
-    console.log(timeArr)
-    console.log(litePriceArr)
+//    console.log(timeArr)
+//    console.log(litePriceArr)
 }
 
 function netPLPriceGraph() {
@@ -146,6 +146,6 @@ function netPLPriceGraph() {
             return netPLArr
         }
     })
-    console.log(timeArr)
-    console.log(netPL)
+//    console.log(timeArr)
+//    console.log(netPL)
 }
