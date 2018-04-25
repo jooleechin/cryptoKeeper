@@ -15,6 +15,9 @@
 
 * [http://cryptokeeper.surge.sh/](http://cryptokeeper.surge.sh/)
 
+## GDAX WebSocket
+![Alt Text](https://media.giphy.com/media/w83o9zLpP3m2sJ9iin/giphy.gif)
+
 ## Splash Screen:
 ![Alt text](./frontend/assets/splash.png)
 
